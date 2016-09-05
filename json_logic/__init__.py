@@ -1,9 +1,9 @@
 # This is a Python implementation of the following jsonLogic JS library:
 # https://github.com/jwadhams/json-logic-js
 
-import sys
-from six.moves import reduce
 import logging
+
+from six.moves import reduce
 
 logger = logging.getLogger(__name__)
 
@@ -92,11 +92,18 @@ operations = {
     "<=": lambda a, b, c=None: a <= b if c is None else a <= b <= c,
     "!": lambda a: not a,
     "%": lambda a, b: a % b,
+
     "and": lambda *args: reduce(lambda total, arg: total and arg, args, True),
+    "all": lambda *args: reduce(lambda total, arg: total and arg, args, True),  # dvs
+
     "or": lambda *args: reduce(lambda total, arg: total or arg, args, False),
+    "any": lambda *args: reduce(lambda total, arg: total or arg, args, False),  # dvs
+
     "?:": lambda a, b, c: b if a else c,
     "if": if_,
     "log": lambda a: logger.info(a) or a,
+    "begins": lambda a, b: a.startswith(b),
+    "ends": lambda a, b: a.endswith(b),
     "in": lambda a, b: a in b if "__contains__" in dir(b) else False,
     "cat": lambda *args: "".join(args),
     "+": lambda *args: sum(float(arg) for arg in args),
